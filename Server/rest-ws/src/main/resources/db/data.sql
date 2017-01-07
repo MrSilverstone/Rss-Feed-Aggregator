@@ -1,1 +1,2 @@
-insert into USER ()
+insert into USER (NAME) values ('Louis');
+insert into USER (NAME) values ('Romain');
