@@ -9,8 +9,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 @Configuration
-@ComponentScan(value = {"fr.epitech.blabla"})
+@ComponentScan(value = {"fr.epitech.aggregator.repository"})
 public class ContextConfig {
+
     @Bean
     public DataSource dataSource(){
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
