@@ -1,7 +1,7 @@
 var app = angular.module('myApp', ['ngResource']);
 
 app.factory('Person', ['$resource', function ($resource) {
-    return $resource('http://localhost:8080/spring4-1/info/person/:personId', {personId: '@pid'},
+    return $resource('http://localhost:8080/info/person/:personId', {personId: '@pid'},
 	{
 		updatePerson: {method: 'PUT'}
 	}

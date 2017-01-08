@@ -1,4 +1,5 @@
 package com.epitech.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,40 +19,46 @@ import com.epitech.service.IPersonService;
 @Controller
 @RequestMapping("/info")
 public class PersonController {
-	@Autowired
-	private IPersonService personService;
-	@RequestMapping("/home")
-	public String home() {
- 		return "home";
- 	}
-	@RequestMapping(value="/person/{id}", method = RequestMethod.GET )
-	public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id) {
-		Person person = personService.getPersonById(id);
-		return new ResponseEntity<Person>(person, HttpStatus.OK);
-	}
-	@RequestMapping(value= "/person", method = RequestMethod.GET)
-	public ResponseEntity<List<Person>> getAllPersons() {
-		List<Person> list = personService.getAllPersons();
-		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
-	}
-	@RequestMapping(value= "/person", method = RequestMethod.POST)
-	public ResponseEntity<Void> addPerson(@RequestBody Person person, UriComponentsBuilder builder) {
+    @Autowired
+    private IPersonService personService;
+
+    @RequestMapping("/home")
+    public String home() {
+        return "home";
+    }
+
+    @RequestMapping(value = "/person/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Person> getPersonById(@PathVariable("id") Integer id) {
+        Person person = personService.getPersonById(id);
+        return new ResponseEntity<Person>(person, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/person", method = RequestMethod.GET)
+    public ResponseEntity<List<Person>> getAllPersons() {
+        List<Person> list = personService.getAllPersons();
+        return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/person", method = RequestMethod.POST)
+    public ResponseEntity<Void> addPerson(@RequestBody Person person, UriComponentsBuilder builder) {
         boolean flag = personService.addPerson(person);
         if (flag == false) {
-        	return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/person/{id}").buildAndExpand(person.getPid()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
-	@RequestMapping(value="/person/{id}", method = RequestMethod.PUT )
-	public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
-		personService.updatePerson(person);
-		return new ResponseEntity<Person>(person, HttpStatus.OK);
-	}
-	@RequestMapping(value="/person/{id}", method = RequestMethod.DELETE )
-	public ResponseEntity<Void> deletePerson(@PathVariable("id") Integer id) {
-		personService.deletePerson(id);
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-	}	
+    }
+
+    @RequestMapping(value = "/person/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+        personService.updatePerson(person);
+        return new ResponseEntity<Person>(person, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/person/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deletePerson(@PathVariable("id") Integer id) {
+        personService.deletePerson(id);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
 } 
