@@ -42,7 +42,7 @@ public class PersonController {
     @RequestMapping(value = "/person", method = RequestMethod.POST)
     public ResponseEntity<Void> addPerson(@RequestBody Person person, UriComponentsBuilder builder) {
         boolean flag = personService.addPerson(person);
-        if (flag == false) {
+        if (!flag) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         HttpHeaders headers = new HttpHeaders();
