@@ -1,49 +1,34 @@
 package com.epitech.config;
 
-import javax.sql.DataSource;
 
-import com.epitech.entity.User;
-import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.SessionFactory;
+import com.epitech.repository.UserRepository;
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.data.authentication.UserCredentials;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@EnableTransactionManagement
+@EnableMongoRepositories(basePackages = "com.epitech.repository")
 public class DBConfig {
+    @Autowired
+    UserRepository userRepository;
     @Bean
-    public HibernateTemplate hibernateTemplate() {
-        return new HibernateTemplate(sessionFactory());
+    public  MongoDbFactory mongoDbFactory() throws Exception {
+        MongoClient mongoClient = new MongoClient("localhost",27017);
+        UserCredentials userCredentials = new UserCredentials("","");
+        return new SimpleMongoDbFactory(mongoClient, "aggregator", userCredentials);
     }
-
     @Bean
-    public DataSource dataSource() {
-        return getDataSource();
-    }
-
-    @Bean
-    public SessionFactory sessionFactory() {
-        return new LocalSessionFactoryBuilder(getDataSource())
-                .addAnnotatedClasses(User.class)
-                .buildSessionFactory();
-    }
-
-    @Bean
-    public DataSource getDataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/aggregator");
-        dataSource.setUsername("root");
-        dataSource.setPassword("12345678");
-        return dataSource;
-    }
-
-    @Bean
-    public HibernateTransactionManager hibTransMan() {
-        return new HibernateTransactionManager(sessionFactory());
+    public MongoTemplate mongoTemplate() throws Exception {
+        MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
+        return mongoTemplate;
     }
 }
+
+// [

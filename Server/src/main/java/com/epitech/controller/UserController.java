@@ -1,20 +1,27 @@
 package com.epitech.controller;
 
 import com.epitech.entity.User;
-import com.epitech.service.IUserService;
+import com.epitech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+
 import java.util.List;
 
 @RestController
 public class UserController {
-    @Autowired
-    private IUserService userService;
 
+    @Autowired
+    private UserRepository repository;
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = repository.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+/*
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
         User user = userService.getUserById(id);
@@ -48,4 +55,5 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    */
 }
