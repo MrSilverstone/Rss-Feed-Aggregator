@@ -41,6 +41,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public User createUser(String email, String password) {
-        return userRepository.save(new User(email, passwordEncoder.encode(password), "ROLE_ADMIN"));
+        return userRepository.save(new User(email, passwordEncoder.encode(password), "ROLE_USER"));
     }
 }

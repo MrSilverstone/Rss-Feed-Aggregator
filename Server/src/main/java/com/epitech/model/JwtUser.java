@@ -33,7 +33,6 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        // no password inside JWT token.
         return null;
     }
 
@@ -49,20 +48,16 @@ public class JwtUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        // A token is never locked
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // == token expiration
-        // TODO
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        // always enabled in JWT case.
         return true;
     }
 }

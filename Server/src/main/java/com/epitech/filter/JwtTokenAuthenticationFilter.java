@@ -48,30 +48,17 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
         HttpServletResponse response = (HttpServletResponse) res;
 
         if(!requiresAuthentication(request)) {
-            /*
-            if the URL requested doesn't match the URL handled by the filter, then we chain to the next filters.
-             */
             chain.doFilter(request, response);
             return;
         }
 
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            /*
-            If there's not authentication information, then we chain to the next filters.
-             The SecurityContext will be analyzed by the chained filter that will throw AuthenticationExceptions if necessary
-            */
             chain.doFilter(request, response);
             return;
         }
 
         try {
-            /*
-            The token is extracted from the header. It's then checked (signature and expiration)
-            An Authentication is then created and registered in the SecurityContext.
-            The SecurityContext will be analyzed by chained filters that will throw Exceptions if necessary
-            (like if authorizations are incorrect).
-            */
             SignedJWT jwt = extractAndDecodeJwt(request);
             checkAuthenticationAndValidity(jwt);
             Authentication auth = buildAuthenticationFromJwt(jwt, request);

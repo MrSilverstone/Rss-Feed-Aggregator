@@ -15,7 +15,9 @@ import com.nimbusds.jwt.util.DateUtils;
 import org.parboiled.common.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
@@ -23,7 +25,9 @@ import java.util.Set;
 
 import static com.nimbusds.jose.JWSAlgorithm.HS256;
 
-public final class JwtUtils {
+public final class JwtUtils implements Serializable {
+
+    private static final long serialVersionUID = -3301605591108950415L;
 
     private final static String AUDIENCE_UNKNOWN = "unknown";
     private final static String AUDIENCE_WEB = "web";

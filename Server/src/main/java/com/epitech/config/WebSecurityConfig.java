@@ -42,28 +42,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     public WebSecurityConfig() {
-        /*
-         * Ignores the default configuration, useless in our case (session management, etc..)
-         */
         super(true);
     }
 
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        /*
-         Configures the AuthenticationManagerBuilder to use the specified DetailsService.
-         The password is also specified as being encrypted in database.
-         */
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        /*
-          Overloaded to expose Authenticationmanager's bean created by configure(AuthenticationManagerBuilder).
-           This bean is used by the AuthenticationController.
-         */
         return super.authenticationManagerBean();
     }
 
@@ -71,42 +60,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
-        /* the secret key used to signe the JWT token is known exclusively by the server.
-         With Nimbus JOSE implementation, it must be at least 256 characters longs.
-         */
+        /// Mettre dans un fichier!!
         String secret = "ksfdlkvopiurutueijflkdsvf,cjnjnxjnvsoifoiropiezaropioezkvf,k,c kv,ckvdkfjgvorieoigfopziefpozepfiezikfozkfldsmvflkvdldvl,fdvk,fdkv,dkfgkjfdgkjvicooiviuzieopiztpoirpotimldkflg,vlkfckjshayauiueruergregierpogipdfogiklxvcjnxvjnfvjdsmkfmslfklgkfgoirgjitrooritjg";
 
         httpSecurity
-                /*
-                Filters are added just after the ExceptionTranslationFilter so that Exceptions are catch by the exceptionHandling()
-                 Further information about the order of filters, see FilterComparator
-                 */
                 .addFilterAfter(jwtTokenAuthenticationFilter("/**", secret), ExceptionTranslationFilter.class)
                 .addFilterAfter(corsFilter(), ExceptionTranslationFilter.class)
-                /*
-                 Exception management is handled by the authenticationEntryPoint (for exceptions related to authentications)
-                 and by the AccessDeniedHandler (for exceptions related to access rights)
-                */
                 .exceptionHandling()
                 .authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
                 .accessDeniedHandler(new RestAccessDeniedHandler())
                 .and()
-                /*
-                  anonymous() consider no authentication as being anonymous instead of null in the security context.
-                 */
                 .anonymous()
                 .and()
-                /* No Http session is used to get the security context */
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
                 .authorizeRequests()
-                    /* All access to the authentication service are permitted without authentication (actually as anonymous) */
                 .antMatchers("/auth/**").permitAll()
-                    /* All the other requests need an authentication.
-                     Role access is done on Methods using annotations like @PreAuthorize
-                     */
-                .anyRequest().authenticated();
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/**").authenticated();
     }
 
     private JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter(String path, String secret) {
@@ -114,12 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private CorsFilter corsFilter() {
-        /*
-         CORS requests are managed only if headers Origin and Access-Control-Request-Method are available on OPTIONS requests
-         (this filter is simply ignored in other cases).
 
-         This filter can be used as a replacement for the @Cors annotation.
-        */
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         CorsConfiguration config = new CorsConfiguration();

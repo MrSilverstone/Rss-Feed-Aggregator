@@ -1,9 +1,8 @@
 package com.epitech.controller;
 
 import com.epitech.Service.UserDetailsServiceImpl;
-import com.epitech.model.AuthenticationRequest;
-import com.epitech.model.AuthenticationResponse;
-import com.epitech.model.User;
+import com.epitech.model.requests.AuthenticationRequest;
+import com.epitech.model.requests.AuthenticationResponse;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
