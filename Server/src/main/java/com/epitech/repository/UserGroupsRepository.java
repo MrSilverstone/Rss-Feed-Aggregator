@@ -1,6 +1,6 @@
 package com.epitech.repository;
 
-import com.epitech.entity.UserGroups;
+import com.epitech.model.UserGroups;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

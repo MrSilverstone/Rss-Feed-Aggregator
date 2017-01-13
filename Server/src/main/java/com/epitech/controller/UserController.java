@@ -1,10 +1,11 @@
 package com.epitech.controller;
 
-import com.epitech.entity.User;
+import com.epitech.model.User;
 import com.epitech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class UserController {
     private UserRepository repository;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = repository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);

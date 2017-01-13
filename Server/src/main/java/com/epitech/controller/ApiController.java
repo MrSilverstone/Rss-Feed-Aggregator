@@ -1,9 +1,8 @@
 package com.epitech.controller;
 
-import com.epitech.entity.Group;
-import com.epitech.entity.UserGroups;
+import com.epitech.model.Group;
+import com.epitech.model.UserGroups;
 import com.epitech.repository.UserGroupsRepository;
-import com.epitech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
