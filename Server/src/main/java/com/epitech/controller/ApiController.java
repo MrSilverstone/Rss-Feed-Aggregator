@@ -72,7 +72,15 @@ public class ApiController {
         User user = userRepository.findByEmail(username);
         UserGroups userGroups = userGroupsRepository.findByUserId(user.getId());
 
-        return new ResponseEntity<>(userGroups.getGroups(), HttpStatus.OK);
+        List<Group> groups;
+
+        if (userGroups == null) {
+            groups = new ArrayList<>();
+        } else{
+            groups = userGroups.getGroups();
+        }
+
+        return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
     /**
@@ -228,4 +236,28 @@ public class ApiController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     *  Delete all groups of user
+     *  @param request HTTP DELETE request, need Token in header Authorization
+     *  @return OK, BAD_REQUEST when body or request is invalid
+     * */
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/groups", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteGroups(HttpServletRequest request) {
+        String username = validateRequest(request);
+
+        if (username == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Getting user and its groups
+        User user = userRepository.findByEmail(username);
+        UserGroups userGroups = userGroupsRepository.findByUserId(user.getId());
+
+        // Resetting groups
+        userGroups.setGroups(new ArrayList<>());
+        userGroupsRepository.save(userGroups);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

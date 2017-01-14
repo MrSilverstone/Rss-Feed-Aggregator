@@ -2,6 +2,8 @@ package com.epitech.Service;
 
 import com.epitech.model.SpringSecurityUser;
 import com.epitech.model.User;
+import com.epitech.model.UserGroups;
+import com.epitech.repository.UserGroupsRepository;
 import com.epitech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.DigestUtils;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service(value = "userDetailsService")
@@ -19,6 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserGroupsRepository userGroupsRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,6 +47,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public User createUser(String email, String password) {
-        return userRepository.save(new User(email, passwordEncoder.encode(password), "ROLE_USER"));
+        User user = new User();
+
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setAuthorities("ROLE_USER");
+
+        User savedUser = userRepository.save(user);
+        UserGroups userGroups = new UserGroups();
+
+        userGroups.setUserId(savedUser.getId());
+        userGroups.setGroups(new ArrayList<>());
+
+        userGroupsRepository.save(userGroups);
+
+        return savedUser;
     }
 }
