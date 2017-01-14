@@ -34,17 +34,28 @@ public class ApiController {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     *  Validate the request with the token in the header
+     *  @return NULL if missing or invalid token, otherwise return the username corresponding to the token
+     * */
+    private String validateRequest(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String token = header.substring("Bearer ".length());
+
+        try {
+            return JwtUtils.getUsername(JwtUtils.parse(token));
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public ResponseEntity<List<Group>> getGroups(HttpServletRequest request) {
 
-        String header = request.getHeader("Authorization");
-        String token = header.substring("Bearer ".length());
+        String username = validateRequest(request);
 
-        String username;
-        try {
-            username = JwtUtils.getUsername(JwtUtils.parse(token));
-        } catch (ParseException e) {
+        if (username == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -58,13 +69,9 @@ public class ApiController {
     @RequestMapping(value = "/groups", method = RequestMethod.PUT)
     public ResponseEntity<List<Group>> addGroup(HttpServletRequest request, @RequestBody NewGroupRequest body) {
 
-        String header = request.getHeader("Authorization");
-        String token = header.substring("Bearer ".length());
+        String username = validateRequest(request);
 
-        String username;
-        try {
-            username = JwtUtils.getUsername(JwtUtils.parse(token));
-        } catch (ParseException e) {
+        if (username == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
