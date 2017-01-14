@@ -1,8 +1,11 @@
 package com.epitech.controller;
 
 import com.epitech.Service.UserDetailsServiceImpl;
+import com.epitech.model.User;
 import com.epitech.model.requests.AuthenticationRequest;
 import com.epitech.model.requests.AuthenticationResponse;
+import com.epitech.model.requests.RegisterResponse;
+import com.epitech.repository.UserRepository;
 import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,9 @@ public class AuthenticationController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -67,12 +73,30 @@ public class AuthenticationController {
      *  @see com.epitech.model.requests.AuthenticationRequest for body structure
      * */
     @RequestMapping(value = "/register", method = POST)
-    public ResponseEntity<Void> registerRequest(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<RegisterResponse> registerRequest(@RequestBody AuthenticationRequest authenticationRequest) {
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
+	
+        RegisterResponse registerResponse = new RegisterResponse();
+	
+        if (username.isEmpty() || password.isEmpty()){
+            registerResponse.setSuccess(false);
+            registerResponse.setMessage("Invalid credentials");
+            return  new ResponseEntity<RegisterResponse>(registerResponse, HttpStatus.OK);
+        }
+	
+        User u = userRepository.findByEmail(username);
+        if (u != null) {
+            registerResponse.setSuccess(false);
+            registerResponse.setMessage("Email already taken");
+            return  new ResponseEntity<RegisterResponse>(registerResponse, HttpStatus.OK);
+        }
 
         userDetailsService.createUser(username, password);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+	
+        registerResponse.setSuccess(true);
+        registerResponse.setMessage("Success");
+	
+        return new ResponseEntity<>(registerResponse, HttpStatus.OK);
     }
 }

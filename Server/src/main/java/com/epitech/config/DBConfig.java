@@ -12,14 +12,18 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableMongoRepositories(basePackages = "com.epitech.repository")
 public class DBConfig {
 
+    @Value("${mongo.db.server}:localhost")
+    private String host;
+    
     @Bean
     public  MongoDbFactory mongoDbFactory() throws Exception {
-        MongoClient mongoClient = new MongoClient("localhost",27017);
+        MongoClient mongoClient = new MongoClient(host, 27017);
         UserCredentials userCredentials = new UserCredentials("","");
         return new SimpleMongoDbFactory(mongoClient, "aggregator", userCredentials);
     }
@@ -29,5 +33,3 @@ public class DBConfig {
         return mongoTemplate;
     }
 }
-
-// [
