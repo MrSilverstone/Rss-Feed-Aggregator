@@ -7,6 +7,7 @@ import com.epitech.model.User;
 import com.epitech.model.UserGroups;
 import com.epitech.model.requests.NewFeedRequest;
 import com.epitech.model.requests.NewGroupRequest;
+import com.epitech.model.requests.ReadItemRequest;
 import com.epitech.model.requests.Response;
 import com.epitech.repository.UserGroupsRepository;
 import com.epitech.repository.UserRepository;
@@ -119,7 +120,7 @@ public class ApiController {
     }
 
     /**
-     *  Add new feed to user group
+     *  Add new feed to group in user groups
      *  @param request HTTP PUT request, need Token in header Authorization
      *  @param body Body of the request
      *  @return OK, BAD_REQUEST when body or request is invalid
@@ -127,7 +128,7 @@ public class ApiController {
      * */
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/feeds", method = RequestMethod.PUT)
-    public ResponseEntity<List<Group>> addGroup(HttpServletRequest request, @RequestBody NewFeedRequest body) {
+    public ResponseEntity<Void> addGroup(HttpServletRequest request, @RequestBody NewFeedRequest body) {
 
         String username = validateRequest(request);
         String feedName = body.getFeed();
@@ -165,6 +166,63 @@ public class ApiController {
         userGroups.setGroups(resultGroups);
 
         // Save userGroups in db
+        userGroupsRepository.save(userGroups);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     *  Add read item to its corresponding feed
+     *  @param request HTTP PUT request, need Token in header Authorization
+     *  @param body Body of the request
+     *  @return OK, BAD_REQUEST when body or request is invalid
+     *  @see com.epitech.model.requests.ReadItemRequest for body structure
+     * */
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/feeds/items", method = RequestMethod.PUT)
+    public ResponseEntity<Void> addGroup(HttpServletRequest request, @RequestBody ReadItemRequest body) {
+        String username = validateRequest(request);
+        String feedName = body.getUrl();
+        String identifier = body.getIdentifier();
+        String groupName = body.getGroupName();
+
+        if (username == null || feedName == null || identifier == null || groupName == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Getting user and its groups
+        User user = userRepository.findByEmail(username);
+        UserGroups userGroups = userGroupsRepository.findByUserId(user.getId());
+        List<Group> groups = userGroups.getGroups();
+
+        Stream<Group> streamGroup = groups.stream();
+        Stream<Group> streamResult = streamGroup
+                .map(group -> {
+                    // Get group for groupName
+                    if (group.getName().equals(groupName)) {
+                        Stream<Feed> feedStream = group.getFeeds().stream();
+                        Stream<Feed> feedStreamResult = feedStream.map(feed -> {
+                            // Get feed for feedName and add identifier
+                            if (feed.getUrl().equals(feedName)) {
+                                List<String> readItems = feed.getReadItems();
+
+                                readItems.add(identifier);
+                                feed.setReadItems(readItems);
+                            }
+
+                            return feed;
+                        });
+
+                        List<Feed> updatedFeeds = feedStreamResult.collect(Collectors.toList());
+                        group.setFeeds(updatedFeeds);
+                    }
+
+                    return group;
+                });
+
+        // Save in db
+        List<Group> updatedGroups = streamResult.collect(Collectors.toList());
+        userGroups.setGroups(updatedGroups);
         userGroupsRepository.save(userGroups);
 
         return new ResponseEntity<>(HttpStatus.OK);
