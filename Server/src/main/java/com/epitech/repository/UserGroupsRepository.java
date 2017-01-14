@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface UserGroupsRepository extends MongoRepository<UserGroups, String> {
 
-    //@Query("{ 'userId' : ?0 }")
     UserGroups findByUserId(String userId);
 
 }

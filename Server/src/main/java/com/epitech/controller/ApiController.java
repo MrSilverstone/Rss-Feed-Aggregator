@@ -7,6 +7,7 @@ import com.epitech.model.User;
 import com.epitech.model.UserGroups;
 import com.epitech.model.requests.NewFeedRequest;
 import com.epitech.model.requests.NewGroupRequest;
+import com.epitech.model.requests.Response;
 import com.epitech.repository.UserGroupsRepository;
 import com.epitech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class ApiController {
 
     /**
      *  Validate the request with the token in the header
+     *  @param request on whom to make validation
      *  @return NULL if missing or invalid token, otherwise return the username corresponding to the token
      * */
     private String validateRequest(HttpServletRequest request) {
@@ -53,6 +55,12 @@ public class ApiController {
         }
     }
 
+    /**
+     *  Get user groups
+     *  @param request HTTP GET request, need Token in header Authorization
+     *  @return OK: JSON object of groups, otherwise returns BAD_REQUEST
+     *  @see UserGroups#getGroups() for response structure
+     * */
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public ResponseEntity<List<Group>> getGroups(HttpServletRequest request) {
@@ -60,7 +68,7 @@ public class ApiController {
         String username = validateRequest(request);
 
         if (username == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         User user = userRepository.findByEmail(username);
@@ -69,19 +77,21 @@ public class ApiController {
         return new ResponseEntity<>(userGroups.getGroups(), HttpStatus.OK);
     }
 
+    /**
+     *  Add new group to user groups
+     *  @param request HTTP PUT request, need Token in header Authorization
+     *  @param body Body of the request
+     *  @return OK, BAD_REQUEST when body or request is invalid
+     *  @see com.epitech.model.requests.NewGroupRequest for body structure
+     * */
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/groups", method = RequestMethod.PUT)
-    public ResponseEntity<List<Group>> addGroup(HttpServletRequest request, @RequestBody NewGroupRequest body) {
+    public ResponseEntity<?> addGroup(HttpServletRequest request, @RequestBody NewGroupRequest body) {
 
         String username = validateRequest(request);
-
-        if (username == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         String newGroupName = body.getGroup();
 
-        if (newGroupName == null) {
+        if (username == null || newGroupName == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -91,7 +101,16 @@ public class ApiController {
 
         // Creating new group and add it to its groups
         List<Group> groups = userGroups.getGroups();
-        Group newGroup = new Group(newGroupName, new ArrayList<Feed>());
+        Stream<Group> streamGroup = groups.stream();
+        Stream<Group> existingGroupsForGroupName = streamGroup
+                .filter(group -> group.getName().equals(newGroupName));
+
+        if (existingGroupsForGroupName.count() > 0) {
+            Response resp = new Response(false, "Group already exists.");
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
+
+        Group newGroup = new Group(newGroupName, new ArrayList<>());
 
         groups.add(newGroup);
         userGroups.setGroups(groups);
@@ -102,20 +121,22 @@ public class ApiController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     *  Add new feed to user group
+     *  @param request HTTP PUT request, need Token in header Authorization
+     *  @param body Body of the request
+     *  @return OK, BAD_REQUEST when body or request is invalid
+     *  @see com.epitech.model.requests.NewFeedRequest for body structure
+     * */
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/feeds", method = RequestMethod.PUT)
     public ResponseEntity<List<Group>> addGroup(HttpServletRequest request, @RequestBody NewFeedRequest body) {
 
         String username = validateRequest(request);
-
-        if (username == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         String feedName = body.getFeed();
         String groupName = body.getGroup();
 
-        if (feedName == null || groupName == null) {
+        if (username == null || feedName == null || groupName == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -127,17 +148,16 @@ public class ApiController {
         List<Group> groups = userGroups.getGroups();
         Stream<Group> groupStream = groups.stream();
 
+
         List<Group> resultGroups = groupStream
-                // Filter stream to get the group corresponding to groupName
-                .filter(group -> group.getName().equals(groupName))
-
-                // Adding the new Feed to this group
                 .map(group -> {
-                    List<Feed> feeds = group.getFeeds();
-                    Feed newFeed = new Feed(feedName, new ArrayList<>());
+                    if (group.getName().equals(groupName)) {
+                        List<Feed> feeds = group.getFeeds();
+                        Feed newFeed = new Feed(feedName, new ArrayList<>());
 
-                    feeds.add(newFeed);
-                    group.setFeeds(feeds);
+                        feeds.add(newFeed);
+                        group.setFeeds(feeds);
+                    }
 
                     return group;
                 })
