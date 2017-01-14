@@ -16,8 +16,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories(basePackages = "com.epitech.repository")
 public class DBConfig {
-    @Autowired
-    UserRepository userRepository;
+
     @Bean
     public  MongoDbFactory mongoDbFactory() throws Exception {
         MongoClient mongoClient = new MongoClient("localhost",27017);
