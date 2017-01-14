@@ -14,7 +14,7 @@ public class PostRequest<T, T2> {
 
     private final String USER_AGENT = "Mozilla/5.0";
 
-    public T2 send(String url, T param) {
+    public boolean send(String url, T param) {
         URL obj = null;
         try {
             obj = new URL(url);
@@ -23,13 +23,11 @@ public class PostRequest<T, T2> {
             con.setRequestProperty("User-Agent", USER_AGENT);
             con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-            ObjectMaper
-
         } catch (MalformedURLException e) {
-            return null;
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return true;
     }
 }
