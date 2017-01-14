@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 @EnableMongoRepositories(basePackages = "com.epitech.repository")
 public class DBConfig {
 
-    @Value("${mongo.db.server}:localhost")
+    @Value("${mongo.db.server:localhost}")
     private String host;
     
     @Bean

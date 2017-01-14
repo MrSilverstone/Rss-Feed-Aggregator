@@ -18,6 +18,12 @@
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
+# Run configurations
+
+.idea/runConfigurations
+.idea/vcs.xml
+
+
 # Gradle:
 .idea/gradle.xml
 .idea/libraries
@@ -57,6 +63,7 @@ fabric.properties
 ### Gradle ###
 .gradle
 /build/
+
 
 # Ignore Gradle GUI config
 gradle-app.setting
