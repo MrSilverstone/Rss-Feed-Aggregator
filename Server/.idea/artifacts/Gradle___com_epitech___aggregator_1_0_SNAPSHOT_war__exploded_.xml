@@ -24,9 +24,6 @@
           <element id="library" level="project" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.0.12.RELEASE" />
           <element id="library" level="project" name="Gradle: org.hibernate.ogm:hibernate-ogm-mongodb:5.1.0.Beta3" />
           <element id="library" level="project" name="Gradle: org.springframework.data:spring-data-mongodb:1.9.6.RELEASE" />
-          <element id="library" level="project" name="Gradle: io.jsonwebtoken:jjwt:0.7.0" />
-          <element id="library" level="project" name="Gradle: org.projectlombok:lombok:1.16.10" />
-          <element id="library" level="project" name="Gradle: commons-io:commons-io:2.5" />
           <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-validation:1.3.3.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-webmvc:4.2.5.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter-aop:1.3.3.RELEASE" />
@@ -82,9 +79,6 @@
           <element id="library" level="project" name="Gradle: org.springframework:spring-beans:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-core:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
-          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.2" />
-          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.8.0" />
-          <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.8.2" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: org.hibernate:hibernate-core:5.1.2.Final" />
           <element id="library" level="project" name="Gradle: org.jboss:jandex:2.0.0.Final" />
@@ -95,11 +89,18 @@
           <element id="library" level="project" name="Gradle: org.springframework.security:spring-security-core:4.1.4.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-web:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: org.javassist:javassist:3.20.0-GA" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.jsonwebtoken/jjwt/0.7.0/f042fe2676bfdc2091545152e47d77e11999946d/jjwt-0.7.0.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.16.10/7bd6fc5b3fb7a77c710226ffaa785b404b620ba0/lombok-1.16.10.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.5/2852e6e05fbb95076fc091f6d1780f1f8fe35e0f/commons-io-2.5.jar" />
           <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nimbusds/nimbus-jose-jwt/4.34/599a949c16bb685a0206dc9be52e4bb2307baaf6/nimbus-jose-jwt-4.34.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.5/6c6c702c89bfff3cd9e80b04d668c5e190d588c6/commons-lang3-3.5.jar" />
           <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.stephenc.jcip/jcip-annotations/1.0-1/ef31541dd28ae2cefdd17c7ebf352d93e9058c63/jcip-annotations-1.0-1.jar" />
           <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.minidev/json-smart/1.3.1/69b3835e96d282ec85fc2e1517b8164c45ed639e/json-smart-1.3.1.jar" />
           <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bouncycastle/bcpkix-jdk15on/1.55/6392d8cba22b722c6570d660ca0b3921ff1bae4f/bcpkix-jdk15on-1.55.jar" />
           <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bouncycastle/bcprov-jdk15on/1.55/935f2e57a00ec2c489cbd2ad830d4a399708f979/bcprov-jdk15on-1.55.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.8.2/1f12816593c1422be957471c98a80bfbace60fa2/jackson-databind-2.8.2.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.8.0/45b426f7796b741035581a176744d91090e2e6fb/jackson-annotations-2.8.0.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.8.2/80004060cc6f71a027b81e89ef4d74628f824f/jackson-core-2.8.2.jar" />
         </element>
       </element>
     </root>
