@@ -1,14 +1,17 @@
 package aggregator.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.MouseEvent;
 
 
 /**
@@ -16,27 +19,35 @@ import javafx.scene.layout.AnchorPane;
  */
 public class LoginController implements Initializable {
 
-    @FXML
-    private AnchorPane anchorPane;
 
-    @FXML
-    private JFXTextField username;
-
-    @FXML
-    private JFXPasswordField pass;
-
-    @FXML
-    private JFXButton login;
-
-    @FXML
-    void makeLogin(ActionEvent event) {
-        if(username.getText().equals("genuine") && pass.getText().equals("coder"))
-        {
-            System.out.println("Welcome");
-        }
-    }
+    public TextField email;
+    public PasswordField password;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    }
+
+    public void onEmailChanged(InputMethodEvent inputMethodEvent) {
+        System.out.println(inputMethodEvent.getCommitted());
+    }
+
+    public void onPasswordChanged(InputMethodEvent inputMethodEvent) {
+        System.out.println(inputMethodEvent.getCommitted());
+    }
+
+    public void login(MouseEvent mouseEvent) {
+
+
+        final String emailStr = email.getText();
+        final String passwordStr = password.getText();
+
+        final Service<Void> loginService = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return null;
+            }
+        };
+
+        loginService.start();
     }
 }
