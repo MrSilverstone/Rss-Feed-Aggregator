@@ -31,6 +31,13 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     *  Authenticate user to get token
+     *  @param authenticationRequest request body
+     *  @return OK: JSON object with token
+     *  @see com.epitech.model.requests.AuthenticationRequest for body structure
+     *  @see com.epitech.model.requests.AuthenticationResponse for response structure
+     * */
     @RequestMapping(value = "/login", method = POST)
     public ResponseEntity<?> authenticationRequest(@RequestBody AuthenticationRequest authenticationRequest)
             throws AuthenticationException, IOException, JOSEException {
@@ -53,6 +60,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 
+    /**
+     *  Register user
+     *  @param authenticationRequest request body
+     *  @return OK, otherwise BAD_REQUEST
+     *  @see com.epitech.model.requests.AuthenticationRequest for body structure
+     * */
     @RequestMapping(value = "/register", method = POST)
     public ResponseEntity<Void> registerRequest(@RequestBody AuthenticationRequest authenticationRequest) {
         String username = authenticationRequest.getUsername();
