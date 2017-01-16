@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #303F9F;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aggregator.controllers.LoginController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #303F9F;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.epitech.controllers.LoginController">
    <children>
       <ImageView fitHeight="48.0" fitWidth="48.0" layoutX="132.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../ressources/icons/rss.png" />
+            <Image url="@../icons/rss.png" />
          </image>
       </ImageView>
       <Label layoutX="180.0" layoutY="39.0" text="RSS Aggregator" textFill="WHITE">
