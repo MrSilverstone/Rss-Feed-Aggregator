@@ -23,6 +23,8 @@ public class DBConfig {
     
     @Bean
     public  MongoDbFactory mongoDbFactory() throws Exception {
+	System.out.println("lalalala!");
+	System.out.println(host);
         MongoClient mongoClient = new MongoClient(host, 27017);
         UserCredentials userCredentials = new UserCredentials("","");
         return new SimpleMongoDbFactory(mongoClient, "aggregator", userCredentials);

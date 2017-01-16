@@ -1,7 +1,9 @@
 FROM tomcat:8-jre8
 
-MAINTAINER Louis
+MAINTAINER Louis Mondesir
 
-RUN ["rm", "-fr", "/usr/local/tomcat/webapps/ROOT"]
-COPY aggregator-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+RUN ["rm", "-rf", "/usr/local/tomcat/webapps/aggregator.war"]
+COPY aggregator-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/aggregator.war
+ENV CATALINA_OPTS="-Dmongo.db.server=172.17.0.2"
+
 CMD ["catalina.sh", "run"]
