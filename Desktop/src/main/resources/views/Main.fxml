@@ -4,9 +4,9 @@
 <?import com.jfoenix.controls.JFXHamburger?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.epitech.controllers.MainController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.92" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.epitech.controllers.MainController">
    <children>
       <JFXHamburger id="Hamburger" fx:id="hamburger" layoutX="510.0" layoutY="21.0" />
-      <JFXDrawer id="Drawer" fx:id="drawer" prefHeight="480.0" prefWidth="200.0" />
+      <JFXDrawer id="Drawer" fx:id="drawer" prefHeight="480.0" prefWidth="178.0" />
    </children>
 </AnchorPane>
