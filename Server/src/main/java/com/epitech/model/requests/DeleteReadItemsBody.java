@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadItemRequest {
-    private String url;
+public class DeleteReadItemsBody {
     private String groupName;
-    private String identifier;
+    private String feedName;
 }
