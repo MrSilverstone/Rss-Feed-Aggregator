@@ -1,58 +1,103 @@
 package com.epitech.controllers;
 
+import javax.annotation.PostConstruct;
+
+import com.epitech.datafx.AnimatedFlowContainer;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
-import com.jfoenix.transitions.hamburger.HamburgerNextArrowBasicTransition;
-import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
+import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
+import com.jfoenix.controls.JFXRippler;
+
+import io.datafx.controller.FXMLController;
+import io.datafx.controller.flow.Flow;
+import io.datafx.controller.flow.FlowException;
+import io.datafx.controller.flow.FlowHandler;
+import io.datafx.controller.flow.container.ContainerAnimations;
+import io.datafx.controller.flow.context.FXMLViewFlowContext;
+import io.datafx.controller.flow.context.ViewFlowContext;
+import io.datafx.controller.util.VetoException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-/**
- * Created by loulo on 16/01/2017.
- */
-public class MainController implements Initializable {
-    @FXML
-    public JFXDrawer drawer;
+@FXMLController("Main.fxml")
+public class MainController {
+    @FXMLViewFlowContext
+    private ViewFlowContext context;
 
     @FXML
-    public JFXHamburger hamburger;
+    private StackPane root;
 
     @FXML
-    public AnchorPane anchorPane;
+    private StackPane titleBurgerContainer;
+    @FXML
+    private JFXHamburger titleBurger;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    private StackPane optionsBurger;
+    @FXML
+    private JFXRippler optionsRippler;
 
-        try {
-            VBox box = FXMLLoader.load(getClass().getResource("/views/NavigationDrawer.fxml"));
-            drawer.setSidePane(box);
-        } catch (IOException ex) {
+    @FXML
+    private JFXDrawer drawer;
+    @FXML
+    private JFXPopup toolbarPopup;
+    @FXML
+    private Label exit;
 
-        }
+    private FlowHandler flowHandler;
+    private FlowHandler sideMenuFlowHandler;
 
-        HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
+    @PostConstruct
+    public void init() throws FlowException, VetoException {
 
-        transition.setRate(-1);
-
-        hamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-            transition.setRate(transition.getRate()*-1);
-            transition.play();
-
-            if (drawer.isShown()){
-                drawer.close();
-            } else {
-                drawer.open();
-            }
+        // init the title hamburger icon
+        drawer.setOnDrawerOpening((e) -> {
+            titleBurger.getAnimation().setRate(1);
+            titleBurger.getAnimation().play();
         });
+        drawer.setOnDrawerClosing((e) -> {
+            titleBurger.getAnimation().setRate(-1);
+            titleBurger.getAnimation().play();
+        });
+        titleBurgerContainer.setOnMouseClicked((e) -> {
+            if (drawer.isHidden() || drawer.isHidding()) drawer.open();
+            else drawer.close();
+        });
+
+        // init Popup
+        toolbarPopup.setPopupContainer(root);
+        toolbarPopup.setSource(optionsRippler);
+        root.getChildren().remove(toolbarPopup);
+
+        optionsBurger.setOnMouseClicked((e) -> {
+            toolbarPopup.show(PopupVPosition.TOP, PopupHPosition.RIGHT, -12, 15);
+        });
+
+        // close application
+        exit.setOnMouseClicked((e) -> {
+            Platform.exit();
+        });
+
+        // create the inner flow and content
+        context = new ViewFlowContext();
+        // set the default controller
+
+        Flow innerFlow = new Flow(HomeController.class);
+
+        flowHandler = innerFlow.createHandler(context);
+        context.register("ContentFlowHandler", flowHandler);
+        context.register("ContentFlow", innerFlow);
+        drawer.setContent(flowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
+        context.register("ContentPane", drawer.getContent().get(0));
+
+        // side controller will add links to the content flow
+        Flow sideMenuFlow = new Flow(SideMenuController.class);
+        sideMenuFlowHandler = sideMenuFlow.createHandler(context);
+        drawer.setSidePane(sideMenuFlowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+
+    <JFXListView fx:id="list1" layoutY="100" prefHeight="144.0" prefWidth="400" styleClass="custom-jfx-list-view">
+
+        <!--
+        <JFXListView fx:id="subList" styleClass="sublist">
+            <groupnode>
+                <Label styleClass="sub-label">LeMonde.fr</Label>
+            </groupnode>
+            <Label>Watch Young Thug Play Dice, Flaunt Cash in 'Guwop' Video</Label>
+            <Label>Jack White Will Open Third Man Records Pressing Plant</Label>
+            <Label>Mexico Extradites Top Drug Lord 'El Chapo' to United States</Label>
+        </JFXListView>
+
+        <JFXListView fx:id="subList1" styleClass="sublist">
+            <groupnode>
+                <Label styleClass="sub-label">RollingsStones.com</Label>
+            </groupnode>
+            <Label>Watch Young Thug Play Dice, Flaunt Cash in 'Guwop' Video</Label>
+            <Label>Jack White Will Open Third Man Records Pressing Plant</Label>
+            <Label>Mexico Extradites Top Drug Lord 'El Chapo' to United States</Label>
+        </JFXListView>
+        -->
+    </JFXListView>
+
+
+</StackPane>

@@ -15,6 +15,29 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.6" level="project" />
     <orderEntry type="library" name="Gradle: org.projectlombok:lombok:1.16.10" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:shichimifx:1.0.5" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:datafx:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:core:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:flow:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:datasources:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:ejb:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:injection:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.datafx:ui:8.0" level="project" />
+    <orderEntry type="library" name="Gradle: de.dimaki:refuel:0.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.controlsfx:controlsfx:8.20.8" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.3.6" level="project" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Gradle: javax.json:javax.json-api:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.2.1" level="project" />
+    <orderEntry type="library" name="Gradle: javax.ejb:ejb-api:3.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.javassist:javassist:3.18.1-GA" level="project" />
+    <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.10" level="project" />
+    <orderEntry type="library" name="Gradle: org.controlsfx:openjfx-dialogs:1.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.3.3" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.1.3" level="project" />
+    <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="library" name="Gradle: de.jensd:fontawesomefx:8.0.13" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="Desktop_main" />
 </module>
