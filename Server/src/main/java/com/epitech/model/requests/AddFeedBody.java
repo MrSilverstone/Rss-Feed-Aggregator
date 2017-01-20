@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewFeedRequest {
-    private String feed;
-    private String group;
+public class AddFeedBody {
+    private String groupName;
+    private String feedName;
 }
