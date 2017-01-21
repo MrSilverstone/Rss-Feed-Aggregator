@@ -1,4 +1,4 @@
-package com.epitech;
+package com.epitech.utils;
 
 
 import com.epitech.exceptions.JwtBadSignatureException;

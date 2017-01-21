@@ -1,6 +1,6 @@
 package com.epitech.filter;
 
-import com.epitech.JwtUtils;
+import com.epitech.utils.JwtUtils;
 import com.epitech.exceptions.JwtBadSignatureException;
 import com.epitech.exceptions.JwtExpirationException;
 import com.epitech.exceptions.MalformedJwtException;
@@ -28,7 +28,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.Date;
 
-import static com.epitech.JwtUtils.*;
+import static com.epitech.utils.JwtUtils.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class JwtTokenAuthenticationFilter extends GenericFilterBean {

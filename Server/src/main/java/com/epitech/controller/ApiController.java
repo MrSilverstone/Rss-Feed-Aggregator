@@ -1,14 +1,12 @@
 package com.epitech.controller;
 
-import com.epitech.JwtUtils;
+import com.epitech.model.*;
+import com.epitech.utils.JwtUtils;
 import com.epitech.business.UserGroupsBO;
-import com.epitech.model.Feed;
-import com.epitech.model.Group;
-import com.epitech.model.User;
-import com.epitech.model.UserGroups;
 import com.epitech.model.requests.*;
 import com.epitech.repository.UserGroupsRepository;
 import com.epitech.repository.UserRepository;
+import com.epitech.utils.RSSFeedParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api")
@@ -181,7 +178,37 @@ public class ApiController {
      *  - Add feed
      *  - Get feeds
      *  - Delete feed
+     *
+     *  - Get feed messages with url
      * */
+
+
+    /**
+     *  Return the feed messages of the given feed
+     *  @param request HTTP POST request, need Token in header Authorization
+     *  @param body request body
+     *  @return OK or BAD_REQUEST when request is invalid (problem with given feed)
+     *  @see FeedMessage for response structure
+     * */
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/feeds/messages", method = RequestMethod.POST)
+    public ResponseEntity<?> getFeedMessages(HttpServletRequest request, @RequestBody GetFeedMessagesBody body) {
+
+        String url = body.getUrl();
+
+        if (url == null) {
+            return new  ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            RSSFeedParser parser = new RSSFeedParser(url);
+            RSSFeed feed = parser.readFeed();
+            return new ResponseEntity<>(feed.getMessages(), HttpStatus.OK);
+        } catch (Exception e) {
+            Response resp = new Response(false, "Error while parsing rss feed.");
+            return new  ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     /**
      *  Delete body in user groups

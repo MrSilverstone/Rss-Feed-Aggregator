@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-import static com.epitech.JwtUtils.generateHMACToken;
+import static com.epitech.utils.JwtUtils.generateHMACToken;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
