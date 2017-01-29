@@ -53,7 +53,9 @@
             </div>
 
             <div v-for="group in groups" v-on:click="setCurrentFeeds(group.name)">
-                <span class="mdl-navigation__link">{{ group.name }}</span>
+                <span class="mdl-navigation__link">{{ group.name }}
+                    <i class="material-icons removeGroup" v-on:click="deleteGroup(group.name)">clear</i>
+                </span>
             </div>
 
         </nav>
@@ -76,15 +78,20 @@
             <ul class="feed-list mdl-list">
                 <li class="mdl-list__item" v-for="feed in currentFeeds">
                 <span class="mdl-list__item-primary-content">
-                    <div>
-                        <div class="rss-link" v-on:click="getMessages(feed.url)">
-                                <i class="material-icons mdl-list__item-icon">rss_feed</i>
+                    <div class="feedTitle">
+                        <div class="inlineBlock rssIcon"><i class="material-icons mdl-list__item-icon">rss_feed</i></div>
+
+                        <div class="rss-link inlineBlock" v-on:click="getMessages(feed.url)">
                                 {{feed.url}}
                         </div>
-                        <div class="feed-message">
-                            <div v-for="message in messages">
+                        <div class="inlineBlock clearFeedIcon" v-on:click="deleteFeed(feed.url)"><i class="material-icons">clear</i></div>
+
+                        <div class="feed-message" v-if="displayFeedMessages(feed.url)">
+                            <div v-for="message in getFeedMessagesForUrl(feed.url)">
                                 <p><a v-bind:href="message.link">{{message.title}}</a></p>
                             </div>
+                        </div>
+                        <div v-else>
                         </div>
                     </div>
                 </span>
@@ -99,21 +106,6 @@
 </div>
 
 </body>
-
-  <!--<div id="app">
-     <button v-on:click="print">print</button>
-      <button v-on:click="add">add</button>
-      <button v-on:click="deleteGroup">delete</button>
-      <button v-on:click="addFeed">Add Feed</button>
-      <ul>
-          <li v-for="group in groups">
-              {{ group.name }}
-              <ul>
-                <li v-for="feed in group.feeds">{{ feed.url }}</li>
-              </ul>
-          </li>
-      </ul>
-  </div>-->
 
 </html>
   

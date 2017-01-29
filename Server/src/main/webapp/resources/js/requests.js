@@ -187,6 +187,28 @@ const requests = {
             })
         },
 
+        delete(url, groupName, callback) {
+            const data = {
+                "feedName": url,
+                "groupName": groupName
+            }
+
+            $.ajax({
+                url: URL.feeds.add,
+                headers: headers(),
+                method: 'DELETE',
+                data: JSON.stringify(data),
+                dataType: 'json',
+
+                statusCode: {
+                    200: _ => {
+                        callback()
+                    }
+                }
+
+            })
+        },
+
         messages(url, callback) {
             const data = {
                 "url": url

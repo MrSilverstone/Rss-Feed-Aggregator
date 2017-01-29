@@ -7,7 +7,7 @@ $(document).ready( _ => {
             groups: [],
             currentFeeds: [],
             currentGroup: "",
-            messages: [] // dic : key -> url, value -> object {title, description, link, author, guid}
+            messages: {} // dic : key -> url, value -> object {title, description, link, author, guid}
         },
 
         methods: {
@@ -16,16 +16,31 @@ $(document).ready( _ => {
                     return e.name == groupName
                 })
 
-                if (group.length > 0) {
+                if (group != null && group.length > 0) {
                     this.currentGroup = groupName
                     this.currentFeeds = group[0].feeds
                 }
             },
 
+            displayFeedMessages: function(url) {
+                return this.messages[url] != null
+            },
+
+            getFeedMessagesForUrl: function(url) {
+                return this.messages[url]
+            },
+
             getMessages: function(url) {
-                requests.feeds.messages(url, messages => {
-                    this.messages = messages
-                })
+                if (this.messages[url] != null) {
+                    this.messages[url] = null
+                    this.$forceUpdate()
+
+                } else {
+                    requests.feeds.messages(url, messages => {
+                        this.messages[url] = messages
+                        this.$forceUpdate()
+                    })
+                }
             },
 
             add: function(groupName) {
@@ -35,13 +50,16 @@ $(document).ready( _ => {
                 })
             },
 
-            deleteGroup: function() {
-                const name = "CECI EST UN TEST"
-
+            deleteGroup: function(name) {
                 requests.groups.delete(name, _ => {
                     this.groups = this.groups.filter( elem => {
                         return elem.name != name
                     })
+
+                    if (this.currentGroup == name) {
+                        this.currentGroup = ""
+                        this.currentFeeds = []
+                    }
                 })
             },
 
@@ -59,6 +77,28 @@ $(document).ready( _ => {
                         })
                     })
                 }
+            },
+
+            deleteFeed: function(url) {
+                const groupName = this.currentGroup
+
+                requests.feeds.delete(url, groupName, _ => {
+                    var newFeeds = this.currentFeeds.filter(feed => {
+                        return feed.url != url
+                    })
+
+                    this.currentFeeds = newFeeds
+
+                    this.groups.map(group => {
+                        if (group.name == groupName) {
+                            group.feeds = newFeeds
+                        }
+
+                        return group
+                    })
+
+                    this.messages[url] = null
+                })
             },
 
             logout: function() {
@@ -90,6 +130,7 @@ $(document).ready( _ => {
     $(".groupLink").click( e => {
         console.log(e)
     })
+
 })
 
 

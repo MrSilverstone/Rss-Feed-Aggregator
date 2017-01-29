@@ -25,3 +25,26 @@
 .blueBG {
 	background-color: #4253af;
 }
+
+.feedTitle {
+	position: relative;
+}
+
+.inlineBlock {
+	display: inline-block;
+}
+
+.rssIcon {
+	position: inherit;
+	top: 5px;
+}
+
+.clearFeedIcon {
+	position: inherit;
+	top: 6px;
+	cursor: pointer;
+}
+
+.removeGroup {
+	cursor: pointer;
+}
