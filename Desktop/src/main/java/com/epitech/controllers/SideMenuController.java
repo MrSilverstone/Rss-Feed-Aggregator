@@ -52,6 +52,7 @@ public class SideMenuController {
 
         Flow contentFlow = (Flow) context.getRegisteredObject("ContentFlow");
 
+
 		/*
         bindNodeToController(button, ButtonController.class, contentFlow, contentFlowHandler);
 		bindNodeToController(checkbox, CheckboxController.class, contentFlow, contentFlowHandler);

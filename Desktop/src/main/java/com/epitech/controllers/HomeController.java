@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import io.datafx.controller.FXMLController;
 import io.datafx.controller.flow.FlowException;
+import io.datafx.controller.flow.context.FXMLViewFlowContext;
+import io.datafx.controller.flow.context.ViewFlowContext;
 import io.datafx.controller.util.VetoException;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,6 +18,9 @@ import javax.annotation.PostConstruct;
 
 @FXMLController(value = "Home.fxml", title = "Home")
 public class HomeController {
+    @FXMLViewFlowContext
+    private ViewFlowContext context;
+
 
     @FXML
     private JFXListView<JFXListView> list1;
