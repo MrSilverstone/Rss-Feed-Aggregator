@@ -33,3 +33,5 @@ jfx {
     mainClass = 'com.epitech.Main'
     vendor = 'Epitech'
 }
+
+mainClassName = 'com.epitech.Main'
