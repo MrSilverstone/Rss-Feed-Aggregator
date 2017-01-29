@@ -12,4 +12,5 @@ import java.util.List;
 public class Feed {
     private String url;
     private List<String> readItems;
+    private List<FeedMessage> feedMessages;
 }

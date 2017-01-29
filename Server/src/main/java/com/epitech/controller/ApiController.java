@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -274,7 +275,20 @@ public class ApiController {
             return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(feeds, HttpStatus.OK);
+        List<Feed> feedsWithMessages = feeds.stream().map(feed -> {
+            try {
+                RSSFeedParser parser = new RSSFeedParser(feed.getUrl());
+                RSSFeed rssfeed = parser.readFeed();
+
+                feed.setFeedMessages(rssfeed.getMessages());
+
+                return feed;
+            } catch (Exception e) {
+                return feed;
+            }
+        }).collect(Collectors.toList());
+
+        return new ResponseEntity<>(feedsWithMessages, HttpStatus.OK);
     }
 
 
@@ -304,7 +318,7 @@ public class ApiController {
         UserGroups userGroups = userGroupsRepository.findByUserId(user.getId());
 
         // Creating new feed and add it in the corresponding group
-        Feed newFeed = new Feed(feedName, new ArrayList<>());
+        Feed newFeed = new Feed(feedName, new ArrayList<>(), new ArrayList<>());
 
         UserGroupsBO.ErrorType error = userGroupsBO.addFeedToGroup(userGroups, newFeed, groupName);
 
