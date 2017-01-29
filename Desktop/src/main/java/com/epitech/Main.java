@@ -10,6 +10,7 @@ import io.datafx.controller.flow.context.FXMLViewFlowContext;
 import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXDecorator;
@@ -32,25 +33,16 @@ public class Main extends Application {
             }
         }).start();
 
-        Flow flow = new Flow(MainController.class);
-        DefaultFlowContainer container = new DefaultFlowContainer();
-        flowContext = new ViewFlowContext();
-        flowContext.register("Stage", stage);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/epitech/controllers/Login.fxml"));
+        Parent root = (Parent)loader.load();
 
-        flow.createHandler(flowContext).start(container);
+        LoginController controller = (LoginController)loader.getController();
+        controller.setPrevStage(stage);
 
-        JFXDecorator decorator = new JFXDecorator(stage, container.getView());
-        decorator.setCustomMaximize(true);
-        Scene scene = new Scene(decorator, 800, 800);
-        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-fonts.css").toExternalForm());
-        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-design.css").toExternalForm());
-        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-main-demo.css").toExternalForm());
-        //		stage.initStyle(StageStyle.UNDECORATED);
-        //		stage.setFullScreen(true);
-        stage.setMinWidth(700);
-        stage.setMinHeight(800);
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Login");
         stage.setScene(scene);
-
         stage.show();
 
     }

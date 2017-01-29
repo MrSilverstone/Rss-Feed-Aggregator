@@ -83,6 +83,8 @@ public class MainController {
             Platform.exit();
         });
 
+        String token = (String)context.getRegisteredObject("token");
+
         // create the inner flow and content
         context = new ViewFlowContext();
         // set the default controller
@@ -92,6 +94,7 @@ public class MainController {
         flowHandler = innerFlow.createHandler(context);
         context.register("ContentFlowHandler", flowHandler);
         context.register("ContentFlow", innerFlow);
+        context.register("token", token);
         drawer.setContent(flowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
         context.register("ContentPane", drawer.getContent().get(0));
 

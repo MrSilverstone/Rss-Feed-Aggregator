@@ -1,4 +1,4 @@
-package com.epitech.Network;
+package com.epitech.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
