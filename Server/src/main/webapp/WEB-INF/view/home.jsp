@@ -83,9 +83,7 @@
                         </div>
                         <div class="feed-message">
                             <div v-for="message in messages">
-                                <p>{{message.title}}</p>
-                                <p>{{message.description}}</p>
-                                <p><a v-bind:href="message.link">Link to the article</a></p>
+                                <p><a v-bind:href="message.link">{{message.title}}</a></p>
                             </div>
                         </div>
                     </div>
