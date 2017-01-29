@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="MyAppTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:colorPrimary">@android:color/holo_blue_light</item>
+        <item name="android:colorPrimaryDark">@android:color/holo_blue_dark</item>
+        <item name="android:statusBarColor">@android:color/holo_blue_light</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/holo_blue_dark</item>
+        <item name="android:colorBackground">@android:color/background_light</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <!-- Any customizations for your app running on pre-3.0 devices here -->
+    </style>
+    <!-- <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+            <item name="colorPrimary">@color/colorPrimary</item>
+            <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+            <item name="colorAccent">@color/colorAccent</item>
+        </style>
+        -->
+    <style name="Signup" parent="Theme.AppCompat.Light">
+        <item name="android:colorButtonNormal">#5CB85C</item>
+    </style>
+</resources>
