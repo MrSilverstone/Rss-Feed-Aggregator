@@ -1,6 +1,15 @@
-.msg-val {
-	color: red;
+.mainContent{
+	width: 700px;
 }
-.msg-success {
-	color: green;
+
+.feed-list {
+}
+
+.rss-link {
+	cursor:pointer;
+}
+
+.feed-message {
+	margin-top: 20px;
+	margin-left: 20px;
 }

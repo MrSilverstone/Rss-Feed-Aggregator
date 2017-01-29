@@ -1,71 +1,96 @@
-var app = angular.module('myApp', ['ngResource']);
+$(document).ready( _ => {
 
-app.factory('Person', ['$resource', function ($resource) {
-    return $resource('http://localhost:8080/info/person/:personId', {personId: '@pid'},
-	{
-		updatePerson: {method: 'PUT'}
-	}
-    );
-}]);
+    var appData = new Vue({
+        el: "#app",
 
-app.controller('PersonController', ['$scope', 'Person', function($scope, Person) {
-    var ob = this;
-    ob.persons=[];
-    ob.person = new Person(); 
-    ob.fetchAllPersons = function(){
-        ob.persons = Person.query();
-    };
-    ob.fetchAllPersons();
-    ob.addPerson = function(){
-	console.log('Inside save');
-	if($scope.personForm.$valid) {
-	  ob.person.$save(function(person){
-	     console.log(person); 
-	     ob.flag= 'created';	
-	     ob.reset();	
-	     ob.fetchAllPersons();
-	  },
-	  function(err){
-	     console.log(err.status);
-	     ob.flag='failed';
-	  }
-          );
+        data: {
+            groups: [],
+            currentFeeds: [],
+            currentGroup: "",
+            messages: [] // dic : key -> url, value -> object {title, description, link, author, guid}
+        },
+
+        methods: {
+            login: function() {
+                requests.auth.login("toto", "toto")
+            },
+
+            setCurrentFeeds: function(groupName) {
+                const group = this.groups.filter(e => {
+                    return e.name == groupName
+                })
+
+                if (group.length > 0) {
+                    this.currentGroup = groupName
+                    this.currentFeeds = group[0].feeds
+                }
+            },
+
+            getMessages: function(url) {
+                requests.feeds.messages(url, messages => {
+                    this.messages = messages
+                })
+            },
+
+            add: function(groupName) {
+                requests.groups.add(groupName, _ => {
+                    const newGroup = createGroup(groupName)
+                    this.groups.push(newGroup)
+                })
+            },
+
+            deleteGroup: function() {
+                const name = "CECI EST UN TEST"
+
+                requests.groups.delete(name, _ => {
+                    this.groups = this.groups.filter( elem => {
+                        return elem.name != name
+                    })
+                })
+            },
+
+            addFeed: function() {
+                const groupName = "lolilol"
+                const url = "JKKJJK"
+
+                requests.feeds.add(url, groupName, _ => {
+                    this.groups.map( elem => {
+                        if (elem.name == groupName) {
+                            const newFeed = createFeed(url)
+                            elem.feeds.push(newFeed)
+                        }
+                    })
+                })
+            }
         }
-    }; 
-    ob.editPerson = function(id){
-	    console.log('Inside edit');
-        ob.person = Person.get({ personId: id}, function() {
-	       ob.flag = 'edit'; 
-	    });
-    };    
-    ob.updatePersonDetail = function(){
-	console.log('Inside update');
-	if($scope.personForm.$valid) {
-    	   ob.person.$updatePerson(function(person){
-    		console.log(person); 
-		ob.updatedId = person.pid;
-				ob.reset();
-		ob.flag = 'updated'; 
-    		ob.fetchAllPersons();
-           });
-	}
-    };	
-    ob.deletePerson = function(id){
-	    console.log('Inside delete');
-	    ob.person = Person.delete({ personId: id}, function() {
-		ob.reset();  
-		ob.flag = 'deleted';
-    		ob.fetchAllPersons(); 
-	    });
-    };		
-    ob.reset = function(){
-    	ob.person = new Person();
-        $scope.personForm.$setPristine();
-    };	
-    ob.cancelUpdate = function(id){
-	    ob.person = new Person();
-	    ob.flag= '';	
-   	    ob.fetchAllPersons();
-    };    
-}]);    
+    })
+
+    const newGroupInput = $("#addGroupInput")
+
+    // detect enter key on input to add new group
+    newGroupInput.keydown(e => {
+        if (e.keyCode == 13) {
+            const groupName = newGroupInput.val()
+
+            requests.groups.add(groupName, _ => {
+                appData.groups.push(createGroup(groupName))
+                newGroupInput.val("")
+            })
+        }
+    })
+
+    // init groups in menu
+    requests.groups.get( groups => {
+        appData.groups = groups
+    })
+
+    $(".groupLink").click( e => {
+        console.log(e)
+    })
+})
+
+
+
+
+
    

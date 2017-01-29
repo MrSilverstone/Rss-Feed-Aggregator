@@ -1,66 +1,105 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <meta charset="UTF-8" /> 
-    <title> Spring MVC 4 REST + AngularJS </title>
-  </head>
-  <body ng-app="myApp">
-   <div ng-controller="PersonController as personCtrl">
-       <h1> Spring MVC 4 REST + AngularJS </h1>
-	<form name="personForm" method="POST">
-	    <table>
-		<tr><td colspan="2">
-		  <div ng-if="personCtrl.flag != 'edit'">
-		     <h3> Add New Person </h3> 
-		  </div>
-		  <div ng-if="personCtrl.flag == 'edit'">
-		     <h3> Update Person for ID: {{ personCtrl.person.pid }} </h3> 
-		  </div> </td>
-		</tr>
-		<tr>
-		      <td>Name: </td> <td><input type="text" name="name" ng-model="personCtrl.person.name" required/> 
-         	      <span ng-show="personForm.name.$error.required" class="msg-val">Name is required.</span> </td>
-		</tr>
-		<tr>
-		      <td>Location: </td> <td> <input type="text" name="location" ng-model="personCtrl.person.location" required/> 
-	              <span ng-show="personForm.location.$error.required" class="msg-val">Location is required.</span> </td>
-		</tr>
-		<tr>
-		     <td colspan="2"> <span ng-if="personCtrl.flag=='created'" class="msg-success">Person successfully added.</span>
-		     <span ng-if="personCtrl.flag=='failed'" class="msg-val">Person already exists.</span> </td>
-		</tr>
-	        <tr><td colspan="2">
-	            <div ng-if="personCtrl.flag != 'edit'">
-		       <input  type="submit" ng-click="personCtrl.addPerson()" value="Add Person"/> 
-		       <input type="button" ng-click="personCtrl.reset()" value="Reset"/>
-		    </div>
-		    <div ng-if="personCtrl.flag == 'edit'">
-		       <input  type="submit" ng-click="personCtrl.updatePersonDetail()" value="Update Person"/> 	
-			   <input type="button" ng-click="personCtrl.cancelUpdate()" value="Cancel"/>				   
-		    </div> </td>
-		</tr>
-		<tr>
-		     <td colspan="2"> <span ng-if="personCtrl.flag=='deleted'" class="msg-success">Person successfully deleted.</span>
-		</tr>
-	    </table>     
-	</form>
-        <table>
-	      <tr><th>ID </th> <th>Name</th> <th>Location</th></tr>
-	      <tr ng-repeat="row in personCtrl.persons">
-	         <td><span ng-bind="row.pid"></span></td>
-	         <td><span ng-bind="row.name"></span></td>
-	         <td><span ng-bind="row.location"></span></td>
-	         <td>
-		    <input type="button" ng-click="personCtrl.deletePerson(row.pid)" value="Delete"/>
-		    <input type="button" ng-click="personCtrl.editPerson(row.pid)" value="Edit"/>
-		    <span ng-if="personCtrl.flag=='updated' && row.pid==personCtrl.updatedId" class="msg-success">Person successfully updated.</span> </td> 
-	      </tr>	
-	</table>
-	</div>
-    <script src="${pageContext.request.contextPath}/app-resources/js/lib/angular.min.js"></script>
-    <script src="${pageContext.request.contextPath}/app-resources/js/lib/angular-resource.min.js"></script>
-	<script src="${pageContext.request.contextPath}/app-resources/js/app.js"></script>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/app-resources/css/style.css"/>
- </body>
-</html>  
+<head>
+    <meta charset="utf-8">
+    <title>RSS Feed Aggregator</title>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="${pageContext.request.contextPath}/app-resources/js/models.js"></script>
+    <script src="${pageContext.request.contextPath}/app-resources/js/requests.js"></script>
+    <script src="${pageContext.request.contextPath}/app-resources/js/app.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/app-resources/css/style.css"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<body>
+
+<!-- Uses a header that contracts as the page scrolls down. -->
+<style>
+    .demo-layout-waterfall .mdl-layout__header-row .mdl-navigation__link:last-of-type  {
+        padding-right: 0;
+    }
+</style>
+
+<div class="demo-layout-waterfall mdl-layout mdl-js-layout" id="app">
+    <header class="mdl-layout__header mdl-layout__header--waterfall">
+        <!-- Top row, always visible -->
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">RSS Feed Aggregator</span>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">My groups</span>
+        <nav class="mdl-navigation">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+                <label class="mdl-button mdl-js-button mdl-button--icon"
+                       for="addGroupInput" id="addGroupButton">
+                    <i class="material-icons">add</i>
+                </label>
+                <div class="mdl-textfield__expandable-holder">
+                    <input class="mdl-textfield__input" type="text" name="sample"
+                           id="addGroupInput">
+                </div>
+            </div>
+
+            <div v-for="group in groups" v-on:click="setCurrentFeeds(group.name)">
+                <span class="mdl-navigation__link">{{ group.name }}</span>
+            </div>
+
+        </nav>
+    </div>
+    <main class="mdl-layout__content">
+        <div class="mainContent" v-if="currentGroup != ''">
+            <h4 style="margin-left: 40px;">RSS Feeds for group {{currentGroup}}</h4>
+            <ul class="feed-list mdl-list">
+                <li class="mdl-list__item" v-for="feed in currentFeeds">
+                <span class="mdl-list__item-primary-content">
+                    <div>
+                        <div class="rss-link" v-on:click="getMessages(feed.url)">
+                                <i class="material-icons mdl-list__item-icon">rss_feed</i>
+                                {{feed.url}}
+                        </div>
+                        <div class="feed-message">
+                            <div v-for="message in messages">
+                                <p>{{message.title}}</p>
+                                <p>{{message.description}}</p>
+                                <p><a v-bind:href="message.link">Link to the article</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
+            <h4 style="margin-left: 40px;">Choose a group to display feeds</h4>
+        </div>
+
+    </main>
+</div>
+
+</body>
+
+  <!--<div id="app">
+     <button v-on:click="print">print</button>
+      <button v-on:click="add">add</button>
+      <button v-on:click="deleteGroup">delete</button>
+      <button v-on:click="addFeed">Add Feed</button>
+      <ul>
+          <li v-for="group in groups">
+              {{ group.name }}
+              <ul>
+                <li v-for="feed in group.feeds">{{ feed.url }}</li>
+              </ul>
+          </li>
+      </ul>
+  </div>-->
+
+</html>
   
