@@ -189,7 +189,7 @@ const requests = {
 
         messages(url, callback) {
             const data = {
-                "url": "http://www.bfmtv.com/rss/info/flux-rss/flux-toutes-les-actualites/"
+                "url": url
             }
 
             $.ajax({

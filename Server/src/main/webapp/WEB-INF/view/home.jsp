@@ -61,6 +61,18 @@
     <main class="mdl-layout__content">
         <div class="mainContent" v-if="currentGroup != ''">
             <h4 style="margin-left: 40px;">RSS Feeds for group {{currentGroup}}</h4>
+            <div style="margin-left: 40px;">
+                <form action="#">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="addFeedTF">
+                        <label class="mdl-textfield__label" for="addFeedTF">Feed url</label>
+                    </div>
+                </form>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" v-on:click="addFeed">
+                    Add feed
+                </button>
+            </div>
+            <!-- Colored raised button -->
             <ul class="feed-list mdl-list">
                 <li class="mdl-list__item" v-for="feed in currentFeeds">
                 <span class="mdl-list__item-primary-content">

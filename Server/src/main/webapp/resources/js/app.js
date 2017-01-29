@@ -46,17 +46,19 @@ $(document).ready( _ => {
             },
 
             addFeed: function() {
-                const groupName = "lolilol"
-                const url = "JKKJJK"
+                const url = $("#addFeedTF").val()
+                const groupName = this.currentGroup
 
-                requests.feeds.add(url, groupName, _ => {
-                    this.groups.map( elem => {
-                        if (elem.name == groupName) {
-                            const newFeed = createFeed(url)
-                            elem.feeds.push(newFeed)
-                        }
+                if (url != "") {
+                    requests.feeds.add(url, groupName, _ => {
+                        this.groups.map( elem => {
+                            if (elem.name == groupName) {
+                                const newFeed = createFeed(url)
+                                elem.feeds.push(newFeed)
+                            }
+                        })
                     })
-                })
+                }
             },
 
             logout: function() {
