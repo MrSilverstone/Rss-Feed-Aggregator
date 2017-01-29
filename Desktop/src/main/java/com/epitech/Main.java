@@ -34,7 +34,7 @@ public class Main extends Application {
 
         JFXDecorator decorator = new JFXDecorator(stage, root);
         decorator.setCustomMaximize(true);
-        Scene scene = new Scene(decorator, 500, 300);
+        Scene scene = new Scene(decorator, 450, 270);
 
         scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-fonts.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-design.css").toExternalForm());

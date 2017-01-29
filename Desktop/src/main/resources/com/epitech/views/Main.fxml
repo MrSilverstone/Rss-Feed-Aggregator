@@ -15,7 +15,8 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import java.lang.String?>
 <?import de.jensd.fx.fontawesome.Icon?>
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.epitech.controllers.MainController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.epitech.controllers.MainController">
     <BorderPane>
         <top>
             <VBox spacing="20">
@@ -45,13 +46,20 @@
 
         <!-- Content Area -->
         <center>
-            <JFXDrawer fx:id="drawer" defaultDrawerSize="250" direction="LEFT">
-                <styleClass>
-                    <String fx:value="body"/>
-                </styleClass>
-            </JFXDrawer>
+            <StackPane>
+                <JFXListView fx:id="feedsList" layoutY="100" prefHeight="144.0" prefWidth="400"
+                             styleClass="custom-jfx-list-view">
+                </JFXListView>
+                <JFXDrawer fx:id="drawer" defaultDrawerSize="250" direction="LEFT">
+                    <styleClass>
+                        <String fx:value="body"/>
+                    </styleClass>
+                </JFXDrawer>
+            </StackPane>
+
         </center>
     </BorderPane>
+
 
     <JFXPopup fx:id="toolbarPopup" styleClass="tool-bar-popup">
         <JFXListView styleClass="option-list-view">

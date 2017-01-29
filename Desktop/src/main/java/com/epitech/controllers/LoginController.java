@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -40,6 +41,8 @@ public class LoginController implements Initializable {
 
     @FXML
     public JFXButton signupBtn;
+
+    private Stage prevStage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -129,11 +132,7 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
-    Stage prevStage;
-
     public void setPrevStage(Stage stage) {
         this.prevStage = stage;
     }
-
-
 }
