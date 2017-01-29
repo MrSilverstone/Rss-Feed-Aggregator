@@ -26,13 +26,6 @@ dependencies {
     compile "org.projectlombok:lombok:1.16.10"
     compile group: 'de.jensd', name: 'fontawesomefx', version: '8.0.0'
     compile group: 'de.jensd', name: 'shichimifx', version: '1.0.5'
-    compile "io.datafx:datafx:8.0"
-    compile "io.datafx:core:8.0"
-    compile "io.datafx:flow:8.0"
-    compile "io.datafx:datasources:8.0"
-    compile "io.datafx:ejb:8.0"
-    compile "io.datafx:injection:8.0"
-    compile "io.datafx:ui:8.0"
     compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.0.26'
 }
 

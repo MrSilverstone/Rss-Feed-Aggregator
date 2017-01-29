@@ -1,64 +1,117 @@
 package com.epitech.controllers;
 
-import com.jfoenix.controls.JFXButton;
+import com.epitech.model.Feed;
+import com.epitech.model.FeedMessage;
+import com.epitech.model.Group;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXListView;
-import io.datafx.controller.FXMLController;
-import io.datafx.controller.flow.FlowException;
-import io.datafx.controller.flow.context.FXMLViewFlowContext;
-import io.datafx.controller.flow.context.ViewFlowContext;
-import io.datafx.controller.util.VetoException;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import org.asynchttpclient.AsyncCompletionHandler;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.Response;
 
-import javax.annotation.PostConstruct;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 
-@FXMLController(value = "Home.fxml", title = "Home")
-public class HomeController {
-    @FXMLViewFlowContext
-    private ViewFlowContext context;
-
-
+public class HomeController implements Initializable {
     @FXML
     private JFXListView<JFXListView> list1;
 
-    private int counter = 0;
+    private String token;
 
-    void populateList() {
+    private void getGroups() {
 
-        String[] titles = new String[]{"Le monde", "9gag", "StackOverflow", "Xda developers"};
+        AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
 
-        for (String title : titles) {
-            Node header = new Label(title);
-            header.getStyleClass().add("sub-label");
+        asyncHttpClient.prepareGet("http://louismondesir.me:8080/aggregator/api/groups")
+                .setHeader("Content-type", "application/json")
+                .setHeader("Authorization", "Bearer " + token)
+                .execute(new AsyncCompletionHandler<Response>() {
+                    @Override
+                    public Response onCompleted(Response response) throws Exception {
 
-            JFXListView<Label> subList = new JFXListView<Label>();
+                        if (response.getStatusCode() != 200)
+                            return null;
 
-            subList.setGroupnode(header);
-            subList.getStyleClass().add("sublist");
+                        ObjectMapper mapper = new ObjectMapper();
 
-            for (int i = 0; i < 15; i++) {
-                Label item = new Label("This is the news number : " + i);
 
-                int itemIndex = i;
-                item.setOnMouseClicked(event -> System.out.println("ici! : " + itemIndex));
-                subList.getItems().add(item);
-            }
+                        Group[] groups = mapper.readValue(response.getResponseBody(), Group[].class);
 
-            list1.getItems().add(subList);
-        }
+                        if (groups.length == 0)
+                            return response;
+
+                        getNews(groups);
+
+                        return response;
+                    }
+                });
+
 
     }
 
+    private void getNews(Group[] groups) {
 
-    @PostConstruct
-    public void init() throws FlowException, VetoException {
 
-        populateList();
-        list1.depthProperty().set(1);
+        AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
+        asyncHttpClient.prepareGet("http://louismondesir.me:8080/aggregator/api/feeds/" + groups[0].getName())
+                .setHeader("Content-type", "application/json")
+                .setHeader("Authorization", "Bearer " + token)
+                .execute(new AsyncCompletionHandler<Response>() {
+                    @Override
+                    public Response onCompleted(Response response) throws Exception {
+
+                        if (response.getStatusCode() != 200)
+                            return null;
+
+                        System.out.println(response.getResponseBody());
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        Feed[] feeds = mapper.readValue(response.getResponseBody(), Feed[].class);
+
+                        Platform.runLater(() -> {
+                            for (Feed feed : feeds) {
+                                Node header = new Label(feed.getUrl());
+                                header.getStyleClass().add("sub-label");
+
+                                JFXListView<Label> subList = new JFXListView<Label>();
+
+                                subList.setGroupnode(header);
+                                subList.getStyleClass().add("sublist");
+
+                                int i = 0;
+                                for (FeedMessage feedMessage : feed.getFeedMessages()) {
+                                    Label item = new Label(feedMessage.getTitle());
+                                    int itemIndex = i;
+                                    item.setOnMouseClicked(event -> System.out.println("ici! : " + itemIndex));
+                                    subList.getItems().add(item);
+                                    i++;
+                                }
+                                list1.getItems().add(subList);
+                            }
+
+                            list1.depthProperty().set(1);
+                        });
+                        return response;
+                    }
+                });
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        Preferences prefs = Preferences.userRoot().node("/com/epitech");
+        token = prefs.get("token", "");
+
+        getGroups();
     }
 
 }

@@ -1,8 +1,6 @@
 package com.epitech.controllers;
 
-import javax.annotation.PostConstruct;
 
-import com.epitech.datafx.AnimatedFlowContainer;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXPopup;
@@ -10,25 +8,18 @@ import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import com.jfoenix.controls.JFXRippler;
 
-import io.datafx.controller.FXMLController;
-import io.datafx.controller.flow.Flow;
-import io.datafx.controller.flow.FlowException;
-import io.datafx.controller.flow.FlowHandler;
-import io.datafx.controller.flow.container.ContainerAnimations;
-import io.datafx.controller.flow.context.FXMLViewFlowContext;
-import io.datafx.controller.flow.context.ViewFlowContext;
-import io.datafx.controller.util.VetoException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-@FXMLController("Main.fxml")
-public class MainController {
-    @FXMLViewFlowContext
-    private ViewFlowContext context;
-
+public class MainController implements Initializable {
     @FXML
     private StackPane root;
 
@@ -49,11 +40,9 @@ public class MainController {
     @FXML
     private Label exit;
 
-    private FlowHandler flowHandler;
-    private FlowHandler sideMenuFlowHandler;
 
-    @PostConstruct
-    public void init() throws FlowException, VetoException {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // init the title hamburger icon
         drawer.setOnDrawerOpening((e) -> {
@@ -83,24 +72,24 @@ public class MainController {
             Platform.exit();
         });
 
-        String token = (String)context.getRegisteredObject("token");
+        String token = "";
 
-        // create the inner flow and content
-        context = new ViewFlowContext();
-        // set the default controller
 
-        Flow innerFlow = new Flow(HomeController.class);
+        FXMLLoader sidePanelLoader = new FXMLLoader(getClass().getResource("/com/epitech/views/SideMenu.fxml"));
+        FXMLLoader contentLoader = new FXMLLoader(getClass().getResource("/com/epitech/views/Home.fxml"));
 
-        flowHandler = innerFlow.createHandler(context);
-        context.register("ContentFlowHandler", flowHandler);
-        context.register("ContentFlow", innerFlow);
-        context.register("token", token);
-        drawer.setContent(flowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
-        context.register("ContentPane", drawer.getContent().get(0));
+        Parent sidePanel;
+        Parent content;
+        try {
+            sidePanel = sidePanelLoader.load();
+            content = contentLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
-        // side controller will add links to the content flow
-        Flow sideMenuFlow = new Flow(SideMenuController.class);
-        sideMenuFlowHandler = sideMenuFlow.createHandler(context);
-        drawer.setSidePane(sideMenuFlowHandler.start(new AnimatedFlowContainer(Duration.millis(320), ContainerAnimations.SWIPE_LEFT)));
+        drawer.setContent(content);
+        drawer.setSidePane(sidePanel);
+
     }
 }

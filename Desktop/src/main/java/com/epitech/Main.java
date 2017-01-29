@@ -1,23 +1,16 @@
 package com.epitech;
 
-import com.epitech.controllers.HomeController;
+
 import com.epitech.controllers.LoginController;
-import com.epitech.controllers.MainController;
+import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.svg.SVGGlyphLoader;
-import io.datafx.controller.flow.Flow;
-import io.datafx.controller.flow.container.DefaultFlowContainer;
-import io.datafx.controller.flow.context.FXMLViewFlowContext;
-import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import com.jfoenix.controls.JFXDecorator;
 
 public class Main extends Application {
-
-    @FXMLViewFlowContext private ViewFlowContext flowContext;
 
     public static void main(String[] args) {
         launch(args);
@@ -33,13 +26,19 @@ public class Main extends Application {
             }
         }).start();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/epitech/controllers/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/epitech/views/Login.fxml"));
         Parent root = (Parent)loader.load();
 
         LoginController controller = (LoginController)loader.getController();
         controller.setPrevStage(stage);
 
-        Scene scene = new Scene(root);
+        JFXDecorator decorator = new JFXDecorator(stage, root);
+        decorator.setCustomMaximize(true);
+        Scene scene = new Scene(decorator, 500, 300);
+
+        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-fonts.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-design.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-main-demo.css").toExternalForm());
 
         stage.setTitle("Login");
         stage.setScene(scene);

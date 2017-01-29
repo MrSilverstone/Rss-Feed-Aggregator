@@ -8,37 +8,27 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import io.datafx.controller.FXMLController;
-import io.datafx.controller.flow.Flow;
-import io.datafx.controller.flow.FlowException;
-import io.datafx.controller.flow.FlowHandler;
-import io.datafx.controller.flow.FlowView;
-import io.datafx.controller.flow.action.ActionTrigger;
-import io.datafx.controller.flow.container.DefaultFlowContainer;
-import io.datafx.controller.flow.context.FXMLViewFlowContext;
-import io.datafx.controller.flow.context.ViewFlowContext;
-import io.datafx.controller.util.VetoException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.asynchttpclient.AsyncCompletionHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.asynchttpclient.Response;
-import sun.rmi.runtime.Log;
 
-import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 
 public class LoginController implements Initializable {
 
-    @FXMLViewFlowContext
-    private ViewFlowContext flowContext;
     @FXML
     public JFXTextField username;
 
@@ -92,6 +82,8 @@ public class LoginController implements Initializable {
                             @Override
                             public void run() {
                                 try {
+                                    Preferences prefs = Preferences.userRoot().node("/com/epitech");
+                                    prefs.put("token", loginResponse.getToken());
                                     setDrawer(loginResponse.getToken());
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -107,22 +99,22 @@ public class LoginController implements Initializable {
     }
 
 
-    void setDrawer(String token) throws FlowException {
+    void setDrawer(String token) {
         prevStage.close();
 
-        prevStage = new Stage();
+        Stage stage = new Stage();
 
-        Flow flow = new Flow(MainController.class);
-        DefaultFlowContainer container = new DefaultFlowContainer();
-        flowContext = new ViewFlowContext();
-        flowContext.register("Stage", prevStage);
-        flowContext.register("token", token);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/epitech/views/Main.fxml"));
+        Parent root;
 
+        try {
+            root = (Parent) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
-        flow.createHandler(flowContext).start(container);
-
-
-        JFXDecorator decorator = new JFXDecorator(prevStage, container.getView());
+        JFXDecorator decorator = new JFXDecorator(stage, root);
         decorator.setCustomMaximize(true);
         Scene scene = new Scene(decorator, 800, 800);
         scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-fonts.css").toExternalForm());
@@ -130,13 +122,11 @@ public class LoginController implements Initializable {
         scene.getStylesheets().add(getClass().getResource("/com/epitech/css/jfoenix-main-demo.css").toExternalForm());
         //		stage.initStyle(StageStyle.UNDECORATED);
         //		stage.setFullScreen(true);
-        prevStage.setMinWidth(700);
-        prevStage.setMinHeight(800);
-        prevStage.setScene(scene);
+        stage.setMinWidth(700);
+        stage.setMinHeight(800);
+        stage.setScene(scene);
 
-        prevStage.show();
-
-        System.out.println("ici!");
+        stage.show();
     }
 
     Stage prevStage;

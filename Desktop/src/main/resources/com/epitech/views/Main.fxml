@@ -15,7 +15,7 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import java.lang.String?>
 <?import de.jensd.fx.fontawesome.Icon?>
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.epitech.controllers.MainController">
     <BorderPane>
         <top>
             <VBox spacing="20">
