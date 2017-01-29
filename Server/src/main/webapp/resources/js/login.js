@@ -17,7 +17,7 @@ $(document).ready( _ => {
                 }
 
                 requests.auth.login(loginTF, loginPWD, _ => {
-                 $( location ).attr("href", "http://localhost:8080/");
+                 $( location ).attr("href", host);
                 })
             },
 
@@ -31,7 +31,7 @@ $(document).ready( _ => {
                 }
                 requests.auth.test()
                 requests.auth.register(registrationTF, registrationPWD, _ => {
-                    $( location ).attr("href", "http://localhost:8080/");
+                    $( location ).attr("href", host);
                     alert("Account created")
                 })
             },

@@ -1,5 +1,8 @@
-const apiUrl = "http://localhost:8080/api"
-const authUrl = "http://localhost:8080/auth"
+const host = "http://louismondesir.me:8080/aggregator/"
+//const host = "http://localhost:8080/
+
+const apiUrl = host + "api"
+const authUrl = host + "auth"
 const groupsUrl = apiUrl + "/groups"
 const feedsUrl = apiUrl + "/feeds"
 

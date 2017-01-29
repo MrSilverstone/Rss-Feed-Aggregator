@@ -103,7 +103,7 @@ $(document).ready( _ => {
 
             logout: function() {
                 $.removeCookie('token')
-                $( location ).attr("href", "http://localhost:8080/");
+                $( location ).attr("href", host);
             }
         }
     })
