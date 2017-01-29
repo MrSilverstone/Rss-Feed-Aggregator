@@ -53,7 +53,7 @@ const requests = {
 
     auth: {
 
-        login(username, password) {
+        login(username, password, callback) {
             const data = {
                 'username': username,
                 'password': password
@@ -67,8 +67,8 @@ const requests = {
                 dataType: 'json',
 
                 success: result => {
-                    alert("Logged !")
                     $.cookie('token', result.token, {'expires' : 1})
+                    callback()
                 },
 
                 statusCode: {
@@ -80,9 +80,29 @@ const requests = {
             })
         },
 
-        register(username, password) {
-            // TODO
-        }
+        register(username, password, callback) {
+            const data = {
+                'username': username,
+                'password': password
+            }
+
+            $.ajax({
+                url: URL.auth.register,
+                headers: headers(false),
+                method: 'POST',
+                data: JSON.stringify(data),
+                dataType: 'json',
+
+                success: result => {
+                    if (result.success) {
+                        callback()
+                    } else {
+                        alert(result.message)
+                    }
+                }
+
+            })
+        },
     },
 
     groups: {

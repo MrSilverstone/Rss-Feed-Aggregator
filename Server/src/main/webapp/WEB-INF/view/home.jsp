@@ -31,6 +31,10 @@
         <div class="mdl-layout__header-row">
             <!-- Title -->
             <span class="mdl-layout-title">RSS Feed Aggregator</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+                <a id="logoutBtn" class="mdl-navigation__link" href="" v-on:click="logout">Log out</a>
+            </nav>
         </div>
     </header>
     <div class="mdl-layout__drawer">

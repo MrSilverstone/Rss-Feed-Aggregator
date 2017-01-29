@@ -11,10 +11,6 @@ $(document).ready( _ => {
         },
 
         methods: {
-            login: function() {
-                requests.auth.login("toto", "toto")
-            },
-
             setCurrentFeeds: function(groupName) {
                 const group = this.groups.filter(e => {
                     return e.name == groupName
@@ -61,6 +57,11 @@ $(document).ready( _ => {
                         }
                     })
                 })
+            },
+
+            logout: function() {
+                $.removeCookie('token')
+                $( location ).attr("href", "http://localhost:8080/");
             }
         }
     })
