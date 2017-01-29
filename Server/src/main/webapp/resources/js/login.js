@@ -29,7 +29,7 @@ $(document).ready( _ => {
                     alert("One or more field is empty")
                     return ;
                 }
-                requests.auth.test()
+
                 requests.auth.register(registrationTF, registrationPWD, _ => {
                     $( location ).attr("href", host);
                     alert("Account created")
